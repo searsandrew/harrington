@@ -15,7 +15,7 @@
                 <flux:button variant="primary">{{ __('New Post') }}</flux:button>
             </nav>
 
-            <div class="mt-5 w-full max-w-lg">
+            <div class="w-full flex flex-col space-y-6">
                 {{ $slot }}
             </div>
         </content>

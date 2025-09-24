@@ -10,9 +10,9 @@ return new class extends Migration {
         Schema::create('posts', function (Blueprint $table) {
             $table->ulid('id')->primary();
             $table->foreignUlid('user_id')->constrained()->cascadeOnDelete();
-            $table->string('title');
+            $table->string('title')->nullable();
             $table->string('subtitle')->nullable();
-            $table->text('content');
+            $table->text('content')->nullable();
             $table->boolean('is_published')->default(false);
             $table->timestamp('published_at')->nullable();
             $table->timestamps();

@@ -113,7 +113,7 @@ class User extends Authenticatable
                 . 'SUM(CASE WHEN is_published = false AND published_at IS NOT NULL THEN 1 ELSE 0 END) as scheduled, '
                 . 'SUM(CASE WHEN is_published = false AND published_at IS NULL THEN 1 ELSE 0 END) as drafts'
             )
-            ->toSql();
+            ->first();
 
         $counts = [
             'published' => (int) ($row->published ?? 0),

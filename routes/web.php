@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CreatePostController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 use Livewire\Volt\Volt;
@@ -36,6 +37,12 @@ Route::middleware(['auth'])->group(function () {
         Volt::route('/published', 'posts.published')->name('posts.published');
         Volt::route('/scheduled', 'posts.scheduled')->name('posts.scheduled');
         Volt::route('/drafts', 'posts.drafts')->name('posts.drafts');
+    });
+
+    Route::group(['prefix' => 'post'], function () {
+        Route::get('/create', CreatePostController::class)->name('post.create');
+        Volt::route('/{post}', 'post.show')->name('post.show');
+        Volt::route('/{post}/edit', 'post.edit')->name('post.edit');
     });
 
     Route::get('tag-list', fn () => response('tag lists'))
