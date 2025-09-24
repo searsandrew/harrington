@@ -29,6 +29,13 @@ Route::middleware(['auth'])->group(function () {
             ),
         )
         ->name('two-factor.show');
+
+    Route::get('post', function() {
+        echo 'posts';
+    })->name('post');
+    Route::get('tag-list', function() {
+        echo 'tag lists';
+    })->name('tag-list');;
 });
 
 require __DIR__.'/auth.php';
