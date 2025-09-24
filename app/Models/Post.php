@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Auth;
 
 class Post extends Model
 {
@@ -26,6 +27,8 @@ class Post extends Model
         'title',
         'subtitle',
         'content',
+        'is_published',
+        'published_at',
     ];
 
     public function user(): BelongsTo

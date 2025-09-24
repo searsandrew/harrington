@@ -13,6 +13,8 @@ return new class extends Migration {
             $table->string('title');
             $table->string('subtitle')->nullable();
             $table->text('content');
+            $table->boolean('is_published')->default(false);
+            $table->timestamp('published_at')->nullable();
             $table->timestamps();
         });
     }

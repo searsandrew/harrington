@@ -15,6 +15,7 @@ Route::view('dashboard', 'dashboard')
 
 Route::middleware(['auth'])->group(function () {
     Route::redirect('settings', 'settings/profile');
+    Route::redirect('posts', 'posts/published')->name('posts.index');
 
     Volt::route('settings/profile', 'settings.profile')->name('profile.edit');
     Volt::route('settings/password', 'settings.password')->name('password.edit');
@@ -31,9 +32,12 @@ Route::middleware(['auth'])->group(function () {
         )
         ->name('two-factor.show');
 
-    // UI placeholder routes referenced by views
-    Route::get('post', fn () => response('posts'))
-        ->name('post');
+    Route::group(['prefix' => 'posts'], function () {
+        Volt::route('/published', 'posts.published')->name('posts.published');
+        Volt::route('/scheduled', 'posts.scheduled')->name('posts.scheduled');
+        Volt::route('/drafts', 'posts.drafts')->name('posts.drafts');
+    });
+
     Route::get('tag-list', fn () => response('tag lists'))
         ->name('tag-list');
 
