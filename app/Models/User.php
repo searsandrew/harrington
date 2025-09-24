@@ -109,11 +109,11 @@ class User extends Authenticatable
         $row = Post::query()
             ->where('user_id', $key)
             ->selectRaw(''
-                . 'SUM(CASE WHEN is_published = 1 THEN 1 ELSE 0 END) as published, '
-                . 'SUM(CASE WHEN is_published = 0 AND published_at IS NOT NULL THEN 1 ELSE 0 END) as scheduled, '
-                . 'SUM(CASE WHEN is_published = 0 AND published_at IS NULL THEN 1 ELSE 0 END) as drafts'
+                . 'SUM(CASE WHEN is_published = true THEN 1 ELSE 0 END) as published, '
+                . 'SUM(CASE WHEN is_published = false AND published_at IS NOT NULL THEN 1 ELSE 0 END) as scheduled, '
+                . 'SUM(CASE WHEN is_published = false AND published_at IS NULL THEN 1 ELSE 0 END) as drafts'
             )
-            ->first();
+            ->toSql();
 
         $counts = [
             'published' => (int) ($row->published ?? 0),
