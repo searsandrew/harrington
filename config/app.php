@@ -133,6 +133,6 @@ return [
     | (e.g. "[1,2,3]"). In production, configure via the APP_ADMIN env var.
     |
     */
-    'ids' => env('APP_ADMIN', ''),
+    'admin' => env('APP_ADMIN', ''),
 
 ];

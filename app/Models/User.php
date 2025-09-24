@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
@@ -12,7 +13,17 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, TwoFactorAuthenticatable;
+    use HasFactory, Notifiable, TwoFactorAuthenticatable, HasUlids;
+
+    /**
+     * The "type" of the primary key ID.
+     */
+    protected $keyType = 'string';
+
+    /**
+     * Indicates if the IDs are auto-incrementing.
+     */
+    public $incrementing = false;
 
     /**
      * The attributes that are mass assignable.
@@ -53,10 +64,9 @@ class User extends Authenticatable
      */
     public function getIsAdminAttribute(): bool
     {
-        // Read from the configuration instead of directly from env.
+        // Read from configuration (supports string CSV or JSON array, or array)
         $raw = config('app.admin');
 
-        // Allow both JSON array and CSV formats
         $ids = [];
         if (is_string($raw)) {
             $trim = trim($raw);
@@ -74,9 +84,9 @@ class User extends Authenticatable
             $ids = $raw;
         }
 
-        // Normalize to integers as strings for strict comparison
-        $ids = array_map(fn ($v) => (string) (int) $v, $ids);
-        $myId = (string) (int) $this->getKey();
+        // Compare as strings (ULIDs)
+        $ids = array_map(fn ($v) => (string) $v, $ids);
+        $myId = (string) $this->getKey();
 
         return in_array($myId, $ids, true);
     }

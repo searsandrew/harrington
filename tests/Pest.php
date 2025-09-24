@@ -48,9 +48,7 @@ expect()->extend('toBeOne', function () {
 function setAdminsEnv($ids): void
 {
     if (is_array($ids)) {
-        $value = implode(',', array_map(fn($v) => (string)(int)$v, $ids));
-    } elseif (is_numeric($ids)) {
-        $value = (string)(int)$ids;
+        $value = implode(',', array_map(fn($v) => (string)$v, $ids));
     } else {
         $value = trim((string)$ids);
     }
@@ -61,7 +59,7 @@ function setAdminsEnv($ids): void
     $_SERVER['APP_ADMIN'] = $value;
 
     // Also update runtime config so tests can change admin list per test
-    config(['admin.ids' => $value]);
+    config(['app.admin' => $value]);
 }
 
 beforeEach(function () {
