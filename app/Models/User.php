@@ -49,6 +49,39 @@ class User extends Authenticatable
     }
 
     /**
+     * Accessor: determine if the user is an admin based on APP_ADMIN env list.
+     */
+    public function getIsAdminAttribute(): bool
+    {
+        // Read from the configuration instead of directly from env.
+        $raw = config('app.admin');
+
+        // Allow both JSON array and CSV formats
+        $ids = [];
+        if (is_string($raw)) {
+            $trim = trim($raw);
+            if ($trim === '') {
+                $ids = [];
+            } elseif (str_starts_with($trim, '[')) {
+                $decoded = json_decode($trim, true);
+                if (is_array($decoded)) {
+                    $ids = $decoded;
+                }
+            } else {
+                $ids = array_filter(array_map('trim', explode(',', $trim)), fn ($v) => $v !== '');
+            }
+        } elseif (is_array($raw)) {
+            $ids = $raw;
+        }
+
+        // Normalize to integers as strings for strict comparison
+        $ids = array_map(fn ($v) => (string) (int) $v, $ids);
+        $myId = (string) (int) $this->getKey();
+
+        return in_array($myId, $ids, true);
+    }
+
+    /**
      * Get the user's initials
      */
     public function initials(): string

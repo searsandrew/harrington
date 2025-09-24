@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 use Livewire\Volt\Volt;
+use App\Http\Controllers\PostController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -30,12 +31,16 @@ Route::middleware(['auth'])->group(function () {
         )
         ->name('two-factor.show');
 
-    Route::get('post', function() {
-        echo 'posts';
-    })->name('post');
-    Route::get('tag-list', function() {
-        echo 'tag lists';
-    })->name('tag-list');;
+    // UI placeholder routes referenced by views
+    Route::get('post', fn () => response('posts'))
+        ->name('post');
+    Route::get('tag-list', fn () => response('tag lists'))
+        ->name('tag-list');
+
+    // Posts endpoints for Livewire-backed UI
+    Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
+    Route::put('/posts/{post}', [PostController::class, 'update'])->name('posts.update');
+    Route::delete('/posts/{post}', [PostController::class, 'destroy'])->name('posts.destroy');
 });
 
 require __DIR__.'/auth.php';

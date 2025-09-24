@@ -123,4 +123,16 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Admin User IDs
+    |--------------------------------------------------------------------------
+    |
+    | Define the list of admin user IDs for the application. This supports
+    | either a comma-separated string (e.g. "1,2,3") or a JSON array string
+    | (e.g. "[1,2,3]"). In production, configure via the APP_ADMIN env var.
+    |
+    */
+    'ids' => env('APP_ADMIN', ''),
+
 ];

@@ -13,7 +13,7 @@
 
 pest()->extend(Tests\TestCase::class)
     ->use(Illuminate\Foundation\Testing\RefreshDatabase::class)
-    ->in('Feature');
+    ->in('Feature', 'Unit');
 
 /*
 |--------------------------------------------------------------------------
@@ -32,7 +32,7 @@ expect()->extend('toBeOne', function () {
 
 /*
 |--------------------------------------------------------------------------
-| Functions
+| Functions & Test Helpers
 |--------------------------------------------------------------------------
 |
 | While Pest is very powerful out-of-the-box, you may have some testing code specific to your
@@ -41,7 +41,30 @@ expect()->extend('toBeOne', function () {
 |
 */
 
-function something()
+/**
+ * Set APP_ADMIN environment variable for tests.
+ * Accepts array/int/string and writes to putenv, $_ENV, and $_SERVER.
+ */
+function setAdminsEnv($ids): void
 {
-    // ..
+    if (is_array($ids)) {
+        $value = implode(',', array_map(fn($v) => (string)(int)$v, $ids));
+    } elseif (is_numeric($ids)) {
+        $value = (string)(int)$ids;
+    } else {
+        $value = trim((string)$ids);
+    }
+
+    // Set the env vars for any direct env() usage during bootstrap
+    putenv('APP_ADMIN=' . $value);
+    $_ENV['APP_ADMIN'] = $value;
+    $_SERVER['APP_ADMIN'] = $value;
+
+    // Also update runtime config so tests can change admin list per test
+    config(['admin.ids' => $value]);
 }
+
+beforeEach(function () {
+    // Ensure a clean slate for each test regarding admin list
+    setAdminsEnv('');
+});
