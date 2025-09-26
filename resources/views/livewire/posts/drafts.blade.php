@@ -98,9 +98,9 @@ new class extends Component {
             </flux:dropdown>
         </flux:button.group>
     </div>
-    <flux:card>
+    <flux:card class="!p-0 divide-y">
         @forelse($this->getPosts() as $post)
-
+            <livewire:posts.list-item :post="$post" key="post-list-item-{{$post->id}}" />
         @empty
             <div class="flex flex-col items-center justify-center text-center space-y-3 w-full pt-5 pb-10">
                 @if($search != '')

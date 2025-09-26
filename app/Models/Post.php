@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Model;
@@ -29,6 +30,11 @@ class Post extends Model
         'content',
         'is_published',
         'published_at',
+    ];
+
+    protected $casts = [
+        'published_at' => 'datetime',
+        'is_published' => 'bool',
     ];
 
     public function user(): BelongsTo
@@ -85,5 +91,22 @@ class Post extends Model
             }
         }
         return $value;
+    }
+
+    protected function status(): Attribute
+    {
+        return Attribute::get(function () {
+            $at = $this->published_at; // Carbon|null (thanks to cast)
+
+            if ($this->is_published && $at?->isFuture()) {
+                return 'scheduled';
+            }
+
+            if ($this->is_published && $at && $at->lessThanOrEqualTo(now())) {
+                return 'published';
+            }
+
+            return 'draft';
+        });
     }
 }

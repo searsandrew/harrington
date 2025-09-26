@@ -12,7 +12,7 @@
                     <flux:navbar.item :href="route('posts.scheduled')" :badge="$counts['scheduled']" :current="request()->routeIs('posts.scheduled')" wire:navigate>{{ __('Scheduled') }}</flux:navbar.item>
                     <flux:navbar.item :href="route('posts.drafts')" :badge="$counts['drafts']" :current="request()->routeIs('posts.drafts')" wire:navigate>{{ __('Drafts') }}</flux:navbar.item>
                 </flux:navbar>
-                <flux:button variant="primary">{{ __('New Post') }}</flux:button>
+                <flux:button variant="primary" :href="route('post.create')" wire:navigate>{{ __('New Post') }}</flux:button>
             </nav>
 
             <div class="w-full flex flex-col space-y-6">
